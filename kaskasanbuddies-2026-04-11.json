@@ -1,0 +1,74 @@
+[
+  {
+    "MuiAvatar-img src": "https://media.kaskasanbuddies.com.ph/banks/ub-logo.png",
+    "MuiTypography-root": "UB"
+  },
+  {
+    "MuiAvatar-img src": "https://media.kaskasanbuddies.com.ph/banks/bpi-logo.png",
+    "MuiTypography-root": "BPI"
+  },
+  {
+    "MuiAvatar-img src": "https://media.kaskasanbuddies.com.ph/banks/rcbc-logo.png",
+    "MuiTypography-root": "RCBC"
+  },
+  {
+    "MuiAvatar-img src": "https://media.kaskasanbuddies.com.ph/banks/metrobank-logo.png",
+    "MuiTypography-root": "MBTC"
+  },
+  {
+    "MuiAvatar-img src": "https://media.kaskasanbuddies.com.ph/banks/2ee7e449-0b86-40b7-b9df-5f67514ec7db.png",
+    "MuiTypography-root": "HSBC"
+  },
+  {
+    "MuiAvatar-img src": "https://media.kaskasanbuddies.com.ph/banks/ew-logo.png",
+    "MuiTypography-root": "EW"
+  },
+  {
+    "MuiAvatar-img src": "https://media.kaskasanbuddies.com.ph/banks/secb-logo.png",
+    "MuiTypography-root": "SECB"
+  },
+  {
+    "MuiAvatar-img src": "https://media.kaskasanbuddies.com.ph/banks/chinabank-logo.png",
+    "MuiTypography-root": "CBC"
+  },
+  {
+    "MuiAvatar-img src": "https://media.kaskasanbuddies.com.ph/banks/0ab48c4c-b45c-4db4-ba18-b18f7ca4696f.png",
+    "MuiTypography-root": "MAYA"
+  },
+  {
+    "MuiAvatar-img src": "https://media.kaskasanbuddies.com.ph/banks/aub-logo.png",
+    "MuiTypography-root": "AUB"
+  },
+  {
+    "MuiAvatar-img src": "https://media.kaskasanbuddies.com.ph/banks/b7818821-1447-4261-abb8-72b6f77ad8d6.png",
+    "MuiTypography-root": "EqB"
+  },
+  {
+    "MuiAvatar-img src": "https://media.kaskasanbuddies.com.ph/banks/boc-logo.png",
+    "MuiTypography-root": "BOC"
+  },
+  {
+    "MuiAvatar-img src": "https://media.kaskasanbuddies.com.ph/banks/landbank-logo.png",
+    "MuiTypography-root": "LBP"
+  },
+  {
+    "MuiAvatar-img src": "https://media.kaskasanbuddies.com.ph/banks/1761326246384-MAYBANK.png",
+    "MuiTypography-root": "MPI"
+  },
+  {
+    "MuiAvatar-img src": "https://media.kaskasanbuddies.com.ph/banks/4533ed85-31f1-4a68-82cb-9f62f3388269.png",
+    "MuiTypography-root": "PNB"
+  },
+  {
+    "MuiAvatar-img src": "https://media.kaskasanbuddies.com.ph/banks/7ffbfafe-782b-42e1-81c7-3cbd7afda720.png",
+    "MuiTypography-root": "ZED"
+  },
+  {
+    "MuiAvatar-img src": "https://media.kaskasanbuddies.com.ph/banks/1757138916288-Artboard%201.png",
+    "MuiTypography-root": "KKB"
+  },
+  {
+    "MuiAvatar-img src": "https://media.kaskasanbuddies.com.ph/banks/1759296280378-photo_2025-10-01%2013.24.21.jpeg",
+    "MuiTypography-root": "BankCard"
+  }
+]

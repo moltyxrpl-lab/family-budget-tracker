@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JOSE FAMILY BUDGET TRACKER</title>
+    <!-- Google Fonts for Modern Typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css?v=5">
+</head>
+<body style="color-scheme: dark;">
+    <div id="password-screen" style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: var(--bg-color); z-index: 99999; display: flex; flex-direction: column; justify-content: center; align-items: center; backdrop-filter: blur(20px);">
+        <div class="glass-card" style="text-align: center; max-width: 90%;">
+            <i class="fa-solid fa-lock" style="font-size: 3rem; color: var(--primary-color); margin-bottom: 1rem;"></i>
+            <h2 style="margin-bottom: 0.5rem;">Family Access Lock</h2>
+            <p class="text-muted" style="margin-bottom: 1.5rem;">Please enter the family password.</p>
+            <form id="password-form" style="display: flex; gap: 0.5rem; justify-content: center;">
+                <input type="password" id="password-input" class="glass-input" placeholder="Password" required style="max-width: 150px;">
+                <button type="submit" class="primary-btn" style="width: auto; padding: 0.75rem 1.25rem;"><i class="fa-solid fa-arrow-right"></i></button>
+            </form>
+            <p id="password-error" class="text-danger" style="margin-top: 1rem; display: none; font-size: 0.85rem;">Incorrect password.</p>
+        </div>
+    </div>
+
+    <div class="background-blobs">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+    </div>
+
+    <div class="app-container">
+        <!-- Main Header -->
+        <header>
+            <div class="header-content">
+                <h1><i class="fa-solid fa-wallet"></i> JOSE FAMILY BUDGET TRACKER</h1>
+                <!-- Moved Month Selector here, but it will be hidden on Investment Tab -->
+                <div class="month-selector" id="budget-month-selector">
+                    <label for="month-select">Month:</label>
+                    <input type="month" id="month-select" class="glass-input">
+                </div>
+            </div>
+            
+            <!-- Tab Navigation -->
+            <div class="tab-navigation glass-card">
+                <button class="tab-btn active" id="tab-budget"><i class="fa-solid fa-coins"></i> Monthly Budget</button>
+                <button class="tab-btn" id="tab-investments"><i class="fa-solid fa-gem"></i> Precious Metals</button>
+                <button class="tab-btn" id="tab-cc"><i class="fa-solid fa-credit-card"></i> Credit Cards</button>
+            </div>
+        </header>
+
+        <!-- ============================== -->
+        <!-- BUDGET VIEW -->
+        <!-- ============================== -->
+        <div id="budget-view" class="view-section active">
+            <!-- Dashboard Summary Grid -->
+            <div class="dashboard">
+                <div class="card glass-card">
+                    <div class="card-icon"><i class="fa-solid fa-sack-dollar"></i></div>
+                    <div class="card-info">
+                        <h3>Budget Given</h3>
+                        <h2 id="display-budget">₱0.00</h2>
+                        <button id="set-budget-btn" class="text-btn">Edit Budget</button>
+                    </div>
+                </div>
+                
+                <div class="card glass-card">
+                    <div class="card-icon expense-icon"><i class="fa-solid fa-money-bill-transfer"></i></div>
+                    <div class="card-info">
+                        <h3>Total Expenses</h3>
+                        <h2 id="display-expenses" class="text-danger">₱0.00</h2>
+                    </div>
+                </div>
+
+                <div class="card glass-card">
+                    <div class="card-icon remaining-icon"><i class="fa-solid fa-piggy-bank"></i></div>
+                    <div class="card-info">
+                        <h3>Remaining</h3>
+                        <h2 id="display-remaining" class="text-success">₱0.00</h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="main-content">
+                <!-- Add Expense Form -->
+                <div class="expense-entry glass-card">
+                    <h2>Add Expense</h2>
+                    <form id="expense-form">
+                        <div class="form-group row">
+                            <div class="input-wrap col">
+                                <label for="expense-date">Date</label>
+                                <input type="date" id="expense-date" class="glass-input" required>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="input-wrap col-2">
+                                <label for="expense-what">What?</label>
+                                <input type="text" id="expense-what" class="glass-input" placeholder="e.g. Groceries, Pamasahe..." required>
+                            </div>
+                            <div class="input-wrap col">
+                                <label for="expense-amount">How Much? (₱)</label>
+                                <input type="number" id="expense-amount" class="glass-input" placeholder="0.00" step="0.01" min="0.01" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="primary-btn"><i class="fa-solid fa-plus"></i> Add to List</button>
+                    </form>
+                </div>
+
+                <!-- Expense List Table -->
+                <div class="expense-list-container glass-card">
+                    <h2>Expense History</h2>
+                    <div class="table-container">
+                        <table id="expense-table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>What?</th>
+                                    <th>Amount</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="expense-tbody">
+                                <!-- Expense rows will be injected here -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div id="empty-state" class="empty-state">
+                        <i class="fa-solid fa-receipt"></i>
+                        <p>No expenses recorded for this month yet. Start fresh!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Past Months History Section -->
+            <div class="history-section">
+                <h2 class="section-title">Past Months History</h2>
+                <div class="history-grid" id="history-grid">
+                    <!-- History cards injected here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================== -->
+        <!-- INVESTMENTS VIEW -->
+        <!-- ============================== -->
+        <div id="investments-view" class="view-section" style="display: none;">
+            <!-- ====== NEW WIDGET FOR LIVE PRICES ====== -->
+            <div class="live-prices-widget glass-card form-container-mb" style="margin-bottom: 2rem;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+                    <h2 style="margin-bottom: 0;"><i class="fa-solid fa-satellite-dish"></i> Live Market Prices (PHP/g)</h2>
+                    <button class="icon-btn" id="refresh-prices-btn" style="background: rgba(255,255,255,0.1); color: var(--text-color);"><i class="fa-solid fa-rotate-right"></i></button>
+                </div>
+                
+                <div class="metals-price-grid">
+                    <!-- Gold Prices Column -->
+                    <div class="price-col">
+                        <h3 style="color: gold; margin-bottom: 0.5rem;"><i class="fa-solid fa-coins"></i> Gold</h3>
+                        <div class="table-container" style="border-radius: 12px; border: 1px solid var(--card-border);">
+                            <table class="price-table">
+                                <thead>
+                                    <tr><th>Karat</th><th>PHP / g</th></tr>
+                                </thead>
+                                <tbody id="live-gold-prices">
+                                    <tr><td colspan="2" class="text-muted"><i class="fa-solid fa-spinner fa-spin"></i> Fetching live data...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <!-- Silver Prices Column -->
+                    <div class="price-col">
+                        <h3 style="color: silver; margin-bottom: 0.5rem;"><i class="fa-solid fa-coins"></i> Silver</h3>
+                        <div class="table-container" style="border-radius: 12px; border: 1px solid var(--card-border);">
+                            <table class="price-table">
+                                <thead>
+                                    <tr><th>Purity</th><th>PHP / g</th></tr>
+                                </thead>
+                                <tbody id="live-silver-prices">
+                                    <tr><td colspan="2" class="text-muted"><i class="fa-solid fa-spinner fa-spin"></i> Fetching live data...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-muted" style="font-size: 0.75rem; text-align: right; margin-top: 1rem;" id="live-price-update-time"></div>
+            </div>
+            <!-- ======================================== -->
+
+            <!-- Investment Form -->
+            <div class="expense-entry glass-card form-container-mb">
+                <h2><i class="fa-solid fa-plus"></i> Add Physical Asset</h2>
+                <form id="investment-form">
+                    <div class="form-group row">
+                        <!-- Photo Upload Area -->
+                        <div class="input-wrap col-12 upload-area">
+                            <label for="inv-photo" class="photo-upload-label">
+                                <i class="fa-solid fa-camera upload-icon"></i>
+                                <span>Click to Upload Asset Photo</span>
+                            </label>
+                            <input type="file" id="inv-photo" accept="image/*" capture="environment" style="display:none;">
+                            <canvas id="photo-canvas" style="display:none;"></canvas>
+                            <div id="photo-preview-container" style="display:none; margin-top: 10px;">
+                                <img id="photo-preview" src="" alt="Preview">
+                                <button type="button" class="text-btn text-danger" id="remove-photo-btn">Remove Photo</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group row">
+                        <div class="input-wrap col">
+                            <label for="inv-type">Asset Type</label>
+                            <select id="inv-type" class="glass-input" required>
+                                <option value="Gold">🥇 Gold</option>
+                                <option value="Silver">🥈 Silver</option>
+                                <option value="Other">🪙 Other Asset</option>
+                            </select>
+                        </div>
+                        <div class="input-wrap col" id="inv-karat-wrapper">
+                            <label for="inv-karat">Karat/Purity (Gold)</label>
+                            <select id="inv-karat" class="glass-input">
+                                <option value="24">24K (99.9%)</option>
+                                <option value="22">22K (91.6%)</option>
+                                <option value="20">20K (83.3%)</option>
+                                <option value="18" selected>18K (75%)</option>
+                                <option value="16">16K (66.6%)</option>
+                                <option value="14">14K (58.3%)</option>
+                                <option value="10">10K (41.7%)</option>
+                            </select>
+                        </div>
+                        <div class="input-wrap col">
+                            <label for="inv-name">Description</label>
+                            <input type="text" id="inv-name" class="glass-input" placeholder="e.g. 1oz PAMP Bar" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
+                        <div class="input-wrap col">
+                            <label for="inv-grams">Weight (Grams)</label>
+                            <input type="number" id="inv-grams" class="glass-input" placeholder="0.0" step="0.01" min="0.01" required>
+                        </div>
+                        <div class="input-wrap col">
+                            <label for="inv-buy">Buy Price (₱)</label>
+                            <input type="number" id="inv-buy" class="glass-input" placeholder="0.00" step="0.01" min="0.01" required>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="primary-btn"><i class="fa-solid fa-vault"></i> Secure in Vault</button>
+                </form>
+            </div>
+
+            <!-- Total Investment Summary -->
+            <div class="dashboard inv-dashboard" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                <div class="card glass-card">
+                    <div class="card-icon" style="background: rgba(255, 215, 0, 0.2); color: gold;"><i class="fa-solid fa-cubes-stacked"></i></div>
+                    <div class="card-info">
+                        <h3>Total Invested (Buy Value)</h3>
+                        <h2 id="display-total-invested">₱0.00</h2>
+                    </div>
+                </div>
+                <div class="card glass-card">
+                    <div class="card-icon" style="background: rgba(10, 132, 255, 0.2); color: var(--primary-color);"><i class="fa-solid fa-coins"></i></div>
+                    <div class="card-info">
+                        <h3>Current Live Value (Unsold)</h3>
+                        <h2 id="display-total-live-value">₱0.00</h2>
+                        <span class="text-muted" style="font-size: 0.8rem">Based on live prices.</span>
+                    </div>
+                </div>
+                <div class="card glass-card">
+                    <div class="card-icon" style="background: rgba(16, 185, 129, 0.2); color: var(--success-color);"><i class="fa-solid fa-arrow-trend-up"></i></div>
+                    <div class="card-info">
+                        <h3>Live Unrealized P/L</h3>
+                        <h2 id="display-unrealized-profit">₱0.00</h2>
+                        <span class="text-muted" style="font-size: 0.8rem">If sold right now.</span>
+                    </div>
+                </div>
+                <div class="card glass-card">
+                    <div class="card-icon" style="background: rgba(50, 215, 75, 0.2); color: var(--success-color);"><i class="fa-solid fa-chart-line"></i></div>
+                    <div class="card-info">
+                        <h3>Actual Computed P/L</h3>
+                        <h2 id="display-total-profit">₱0.00</h2>
+                        <span class="text-muted" style="font-size: 0.8rem">Based on sold items.</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Investment Gallery -->
+            <div class="history-section" style="margin-top: 1rem;">
+                <h2 class="section-title">My Vault <i class="fa-solid fa-lock"></i></h2>
+                <div class="history-grid" id="investments-grid">
+                    <!-- Investment cards injected here -->
+                </div>
+                <div id="inv-empty-state" class="empty-state">
+                    <i class="fa-solid fa-box-open"></i>
+                    <p>Your vault is empty. Add your first investment above!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ============================== -->
+        <!-- CREDIT CARDS VIEW -->
+        <!-- ============================== -->
+        <div id="cc-view" class="view-section" style="display: none;">
+            <!-- Credit Cards Dashboard -->
+            <div class="dashboard inv-dashboard" style="grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));">
+                <div class="card glass-card">
+                    <div class="card-icon" style="background: rgba(255, 69, 58, 0.2); color: #ff453a;"><i class="fa-solid fa-file-invoice-dollar"></i></div>
+                    <div class="card-info">
+                        <h3>Total Outstanding Balance</h3>
+                        <h2 id="display-total-cc-balance" class="text-danger">₱0.00</h2>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add Credit Card Form -->
+            <div class="expense-entry glass-card form-container-mb" style="position: relative; z-index: 100;">
+                <h2><i class="fa-solid fa-plus"></i> Add Credit Card Bill</h2>
+                <form id="cc-form">
+                    <div class="form-group row">
+                        <div class="input-wrap col" style="position: relative;">
+                            <label for="cc-bank">Card / Bank</label>
+                            <div class="custom-select-container">
+                                <div class="glass-input custom-select-box" id="cc-select-box">
+                                    <div class="custom-select-selected-content">
+                                        <span id="cc-selected-text">Select a Card / Bank</span>
+                                    </div>
+                                    <i class="fa-solid fa-chevron-down"></i>
+                                </div>
+                                <div class="custom-select-dropdown glass-card" id="cc-dropdown" style="display: none;">
+                                    <input type="text" id="cc-search-input" class="glass-input w-100" placeholder="Search a card..." autocomplete="off" style="margin-bottom: 0.5rem; font-size: 0.9rem; padding: 0.5rem;">
+                                    <div class="custom-select-options" id="cc-options-list">
+                                        <!-- Options injected dynamically via JS -->
+                                    </div>
+                                </div>
+                                <input type="hidden" id="cc-bank" required>
+                            </div>
+                        </div>
+                        <div class="input-wrap col" id="cc-custom-name-wrapper" style="display: none;">
+                            <label for="cc-custom-name">Custom Card Name</label>
+                            <input type="text" id="cc-custom-name" class="glass-input" placeholder="e.g. My Custom Card">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="input-wrap col">
+                            <label for="cc-amount">Amount to Pay (₱)</label>
+                            <input type="number" id="cc-amount" class="glass-input" placeholder="0.00" step="0.01" min="0.01" required>
+                        </div>
+                        <div class="input-wrap col">
+                            <label for="cc-limit">Credit Limit (₱) <span class="text-muted" style="font-size:0.75rem; font-weight:normal">(Optional)</span></label>
+                            <input type="number" id="cc-limit" class="glass-input" placeholder="0.00" step="0.01" min="0">
+                        </div>
+                        <div class="input-wrap col">
+                            <label for="cc-due-date">Due Date</label>
+                            <input type="date" id="cc-due-date" class="glass-input" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="primary-btn"><i class="fa-solid fa-plus"></i> Add Bill</button>
+                </form>
+            </div>
+
+            <!-- Active Pending Bills -->
+            <div class="history-section" style="margin-top: 1rem;">
+                <h2 class="section-title">Pending Bills <i class="fa-solid fa-hourglass-half"></i></h2>
+                <div class="history-grid" id="cc-active-grid">
+                    <!-- Cards injected here -->
+                </div>
+                <div id="cc-empty-state" class="empty-state">
+                    <i class="fa-solid fa-check-circle" style="color: var(--success-color);"></i>
+                    <p>All clear! No pending credit card bills.</p>
+                </div>
+            </div>
+
+            <!-- Paid Bills History -->
+            <div class="history-section" style="margin-top: 1rem;">
+                <h2 class="section-title">Payment History <i class="fa-solid fa-clock-rotate-left"></i></h2>
+                <div class="table-container glass-card" style="padding: 1.5rem;">
+                    <table id="cc-history-table">
+                        <thead>
+                            <tr>
+                                <th>Card Name</th>
+                                <th>Amount Paid</th>
+                                <th>Due Date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="cc-history-tbody">
+                            <!-- Rows injected here -->
+                        </tbody>
+                    </table>
+                    <div id="cc-history-empty" class="empty-state text-muted" style="margin-top:1rem; padding: 1rem; flex-direction:row; font-size:0.9rem;">
+                        No history available.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Setting Budget -->
+    <div id="budget-modal" class="modal">
+        <div class="modal-content glass-card">
+            <span class="close-modal">&times;</span>
+            <h2>Set Month's Budget</h2>
+            <p>Set a new budget. This will only affect the currently selected month.</p>
+            <form id="budget-form">
+                <div class="form-group">
+                    <input type="number" id="new-budget-amount" class="glass-input" placeholder="₱ Amount" step="0.01" min="0" required>
+                </div>
+                <button type="submit" class="primary-btn w-100">Save Budget</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal for Editing Investment -->
+    <div id="edit-investment-modal" class="modal">
+        <div class="modal-content glass-card">
+            <span class="close-modal" id="close-edit-inv-modal">&times;</span>
+            <h2>Edit Asset Details</h2>
+            <form id="edit-investment-form">
+                <input type="hidden" id="edit-inv-id">
+                <div class="form-group row">
+                    <div class="input-wrap w-100" style="flex:1;">
+                        <label for="edit-inv-name">Description</label>
+                        <input type="text" id="edit-inv-name" class="glass-input" required>
+                    </div>
+                </div>
+                <div class="form-group row" id="edit-inv-karat-wrapper">
+                    <div class="input-wrap w-100" style="flex:1;">
+                        <label for="edit-inv-karat">Karat/Purity (Gold)</label>
+                        <select id="edit-inv-karat" class="glass-input">
+                            <option value="24">24K (99.9%)</option>
+                            <option value="22">22K (91.6%)</option>
+                            <option value="20">20K (83.3%)</option>
+                            <option value="18">18K (75%)</option>
+                            <option value="16">16K (66.6%)</option>
+                            <option value="14">14K (58.3%)</option>
+                            <option value="10">10K (41.7%)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="input-wrap col">
+                        <label for="edit-inv-grams">Weight (Grams)</label>
+                        <input type="number" id="edit-inv-grams" class="glass-input" step="0.01" min="0.01" required>
+                    </div>
+                    <div class="input-wrap col">
+                        <label for="edit-inv-buy">Buy Price (₱)</label>
+                        <input type="number" id="edit-inv-buy" class="glass-input" step="0.01" min="0.01" required>
+                    </div>
+                </div>
+                <button type="submit" class="primary-btn w-100">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal for Editing Credit Card -->
+    <div id="edit-cc-modal" class="modal">
+        <div class="modal-content glass-card">
+            <span class="close-modal" id="close-edit-cc-modal">&times;</span>
+            <h2>Edit Bill Details</h2>
+            <form id="edit-cc-form">
+                <input type="hidden" id="edit-cc-id">
+                <div class="form-group row">
+                    <div class="input-wrap w-100" style="flex:1;">
+                        <label for="edit-cc-amount">Amount to Pay (₱)</label>
+                        <input type="number" id="edit-cc-amount" class="glass-input" step="0.01" min="0.01" required>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="input-wrap w-100" style="flex:1;">
+                        <label for="edit-cc-due-date">Due Date</label>
+                        <input type="date" id="edit-cc-due-date" class="glass-input" required>
+                    </div>
+                </div>
+                <button type="submit" class="primary-btn w-100">Save Changes</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js?v=5"></script>
+</body>
+</html>
