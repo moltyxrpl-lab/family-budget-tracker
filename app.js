@@ -232,7 +232,7 @@ const fetchLiveMetals = async () => {
     silverTbody.innerHTML = '<tr><td colspan="2" class="text-muted"><i class="fa-solid fa-spinner fa-spin"></i> Fetching live data...</td></tr>';
     
     try {
-        const res = await fetch("https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/usd.json");
+        const res = await fetch("https://latest.currency-api.pages.dev/v1/currencies/usd.json");
         const data = await res.json();
         
         const php = data.usd.php;
