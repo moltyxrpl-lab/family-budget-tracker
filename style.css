@@ -507,7 +507,8 @@ tbody tr:hover {
 
 .inv-photo-container {
     width: 100%;
-    height: 180px;
+    aspect-ratio: 3 / 4;
+    max-height: 400px;
     background: #111;
     overflow: hidden;
     border-bottom: 1px solid var(--card-border);
@@ -519,7 +520,7 @@ tbody tr:hover {
 .inv-photo {
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: contain;
 }
 
 .inv-photo-placeholder {
@@ -781,6 +782,7 @@ tbody tr:hover {
 .bank-maya { background: linear-gradient(135deg, #1f1f1f, #000000); border-left: 4px solid #00E463; } /* Maya Black/Neon */
 .bank-zed { background: linear-gradient(135deg, #9ca3af, #4b5563); } /* Zed Titanium */
 .bank-gcash { background: linear-gradient(135deg, #005ce6, #003cb3); border-right: 4px solid #ffffff; } /* GCash Blue */
+.bank-shopee { background: linear-gradient(135deg, #ee4d2d, #ff7337); border-right: 4px solid #ffffff; } /* Shopee Orange */
 .bank-cimb { background: linear-gradient(135deg, #e3000f, #8c0009); } /* CIMB Red */
 .bank-other { background: linear-gradient(135deg, #333333, #111111); } /* Generic Dark */
 

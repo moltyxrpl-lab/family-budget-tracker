@@ -18,7 +18,14 @@ const updateJSONBin = () => {
             Investments_Data: investmentsData,
             CreditCards_Data: creditCardsData
         })
-    }).catch(err => console.error("Error saving data", err));
+    })
+    .then(res => {
+        if (!res.ok) {
+            console.error("JSONBin error:", res.status, res.statusText);
+            if(res.status === 413) alert("Data limit reached! Please remove older photos to save new ones.");
+        }
+    })
+    .catch(err => console.error("Error saving data", err));
 };
 
 const fetchJSONBin = async () => {
@@ -460,13 +467,19 @@ const handlePhotoUpload = (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
+    const btn = elements.invForm.querySelector('button[type="submit"]');
+    if(btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing Photo...';
+    }
+
     const reader = new FileReader();
     reader.onload = (event) => {
         const img = new Image();
         img.onload = () => {
             const ctx = elements.photoCanvas.getContext('2d');
-            let MAX_WIDTH = 500;
-            let MAX_HEIGHT = 500;
+            let MAX_WIDTH = 600;
+            let MAX_HEIGHT = 800;
             let width = img.width;
             let height = img.height;
 
@@ -487,9 +500,14 @@ const handlePhotoUpload = (e) => {
             ctx.drawImage(img, 0, 0, width, height);
             
             // Compress down to lightweight jpg array
-            currentPhotoBase64 = elements.photoCanvas.toDataURL('image/jpeg', 0.6);
+            currentPhotoBase64 = elements.photoCanvas.toDataURL('image/jpeg', 0.4);
             elements.photoPreview.src = currentPhotoBase64;
             elements.photoPreviewContainer.style.display = 'block';
+
+            if(btn) {
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-vault"></i> Secure in Vault';
+            }
         };
         img.src = event.target.result;
     };
@@ -610,8 +628,8 @@ const handleAddExistingPhoto = (id, input) => {
         const img = new Image();
         img.onload = () => {
             const ctx = elements.photoCanvas.getContext('2d');
-            let MAX_WIDTH = 500;
-            let MAX_HEIGHT = 500;
+            let MAX_WIDTH = 600;
+            let MAX_HEIGHT = 800;
             let width = img.width;
             let height = img.height;
 
@@ -625,7 +643,7 @@ const handleAddExistingPhoto = (id, input) => {
             elements.photoCanvas.height = height;
             ctx.drawImage(img, 0, 0, width, height);
             
-            const b64 = elements.photoCanvas.toDataURL('image/jpeg', 0.6);
+            const b64 = elements.photoCanvas.toDataURL('image/jpeg', 0.4);
             
             const index = investmentsData.findIndex(inv => inv.id === id);
             if (index !== -1) {
@@ -916,6 +934,7 @@ const getBankClass = (name) => {
     if (lName.includes('maya')) return 'bank-maya';
     if (lName.includes('zed')) return 'bank-zed';
     if (lName.includes('gcash') || lName.includes('gcredit')) return 'bank-gcash';
+    if (lName.includes('shopee')) return 'bank-shopee';
     if (lName.includes('cimb')) return 'bank-cimb';
     return 'bank-other';
 };
@@ -938,6 +957,10 @@ const kaskasanLogos = {
 };
 
 const creditCardOptions = [
+  {
+    "name": "Shopee Pay",
+    "image": "credit card images/shopeepay.png"
+  },
   {
     "name": "Atome Card",
     "image": "credit card images/atomecard.png"
